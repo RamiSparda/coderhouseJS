@@ -1,6 +1,7 @@
 const mensajeBienvenida = "Bienvenido";
+let intentos = 3;
 
-
+// Diccionario de sustituciones
 const sustituciones = [
     { letra: /a/gi, cambio: "4" },
     { letra: /e/gi, cambio: "3" },
@@ -10,26 +11,33 @@ const sustituciones = [
     { letra: /t/gi, cambio: "7" }
 ];
 
+
+// Función para generar una contraseña basada en una frase
 function generarContrasena() {
     let nombre = prompt("Cuál es tu nombre?");
     if (!nombre) {
-        alert("Ingresar un nombre.");
+        alert("Ingresa un nombre.");
         return;
     }
     
-    let frase = prompt("Ingresa una frase para generar la contraseña:");
-    if (!frase) {
-        alert("Ingresar una frase.");
-        return;
+    while (intentos > 0) {
+        let frase = prompt("Ingresa una frase para generar la contraseña:");
+        if (!frase) {
+            alert("Ingresa una frase.");
+            intentos--;
+            continue;
+        }
+        
+        let contrasena = frase;
+        sustituciones.forEach(({ letra, cambio }) => {
+            contrasena = contrasena.replace(letra, cambio);
+        });
+        
+        
+        alert(`Tu contraseña generada es: ${contrasena}`);
+        break;
     }
     
-
-    let contrasena = frase;
-    sustituciones.forEach(({ letra, cambio }) => {
-        contrasena = contrasena.replace(letra, cambio);
-    });
-    
-    
-    alert(`Tu contraseña es: ${contrasena}`);
-    alert(`Adios, ${nombre}.😘`);
+    alert(`Adios, ${nombre}. 😘`);
 }
+
