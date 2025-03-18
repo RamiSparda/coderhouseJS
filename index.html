@@ -3,12 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador JS</title>
-    <script defer src="script.js"></script>
+    <title>Generador de Contraseñas</title>
 </head>
 <body>
-    <h1>HOLAAAAAA!!</h1>
-    <p>Esto es un generador de contraseñas basadas un frases, piensa una frase, palabra o dicho y se creara una contraseña segura.</p>
-    <button onclick="generarContrasena()">Iniciar</button>
+
+    <h1>Generador de Contraseñas</h1>
+
+    <label for="frase">Frase base:</label>
+    <input type="text" id="frase">
+
+    <label for="plataforma">Selecciona la plataforma:</label>
+    <select id="plataforma">
+        <option value="GitHub">GitHub</option>
+        <option value="Facebook">Facebook</option>
+        <option value="Twitter">Twitter</option>
+        <option value="Otra">Otra</option>
+    </select>
+
+    <button id="generarBtn">Generar Contraseña</button>
+
+    <p id="mensajeError" style="display:none; color: red;"></p>
+    <p id="mensajeExito" style="display:none; color: green;"></p>
+
+    <h2>Contraseñas Generadas:</h2>
+    <ul id="listaContraseñas"></ul>
+
+    <script src="script.js"></script>
+
 </body>
 </html>
