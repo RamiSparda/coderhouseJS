@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     let intentos = 3;
+
     const sustituciones = [
         { letra: /a/gi, cambio: "4" },
         { letra: /e/gi, cambio: "3" },
@@ -33,26 +34,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function generarContraseña() {
-
-        let frase = fraseInput.value.trim();
+        const frase = fraseInput.value.trim();
         if (!frase) {
             mostrarMensaje("Por favor, ingresa una frase para generar la contraseña.", "error");
             if (--intentos === 0) generarBtn.disabled = true;
             return;
         }
 
-        let Contraseña = sustituciones.reduce((acc, { letra, cambio }) => acc.replace(letra, cambio), frase);
-        Contraseña += plataformasExtras[plataformaSelect.value] || "";
+        let contrasena = sustituciones.reduce((acc, { letra, cambio }) => acc.replace(letra, cambio), frase);
+        contrasena += plataformasExtras[plataformaSelect.value] || "";
 
-        const ContraseñaObj = { plataforma: plataformaSelect.value, Contraseña };
-        guardarContraseña(ContraseñaObj);
-        mostrarContraseña(ContraseñaObj);
+        const contrasenaObj = { plataforma: plataformaSelect.value, contrasena };
+        guardarContraseña(contrasenaObj);
+        mostrarContraseña(contrasenaObj);
     }
 
-    function guardarContraseña(ContraseñaObj) {
+    function guardarContraseña(contrasenaObj) {
+        // Guardar localmente
         const contraseñas = JSON.parse(localStorage.getItem("contraseñas")) || [];
-        contraseñas.push(ContraseñaObj);
+        contraseñas.push(contrasenaObj);
         localStorage.setItem("contraseñas", JSON.stringify(contraseñas));
+
+        fetch("https://jsonplaceholder.typicode.com/posts", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(contrasenaObj)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Error al guardar remotamente");
+            return response.json();
+        })
+        .then(data => {
+            console.log("Contraseña enviada al servidor (simulado):", data);
+        })
+        .catch(error => {
+            console.error("Error con fetch:", error);
+            mostrarMensaje("Error al guardar en el servidor.", "error");
+        });
     }
 
     function cargarContraseñas() {
@@ -61,25 +81,39 @@ document.addEventListener("DOMContentLoaded", () => {
         contraseñas.forEach(mostrarContraseña);
     }
 
-    function mostrarContraseña({ plataforma, Contraseña }) {
-        const li = document.createElement("li");
-        li.textContent = `Plataforma: ${plataforma} - ${Contraseña} `;
-
+    function mostrarContraseña({ plataforma, contrasena }) {
+        const tr = document.createElement("tr");
+    
+        const tdPlataforma = document.createElement("td");
+        tdPlataforma.textContent = plataforma;
+    
+        const tdContrasena = document.createElement("td");
+        tdContrasena.textContent = contrasena;
+    
+        const tdAcciones = document.createElement("td");
+    
         const copyBtn = document.createElement("button");
         copyBtn.textContent = "Copiar";
-        copyBtn.addEventListener("click", () => copiarContraseña(Contraseña));
-
+        copyBtn.addEventListener("click", () => copiarContraseña(contrasena));
+    
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "Eliminar";
-        deleteBtn.addEventListener("click", () => eliminarContraseña(plataforma, li));
-
-        li.appendChild(copyBtn);
-        li.appendChild(deleteBtn);
-        listaContraseñas.appendChild(li);
+        deleteBtn.addEventListener("click", () => eliminarContraseña(plataforma, tr));
+    
+        tdAcciones.appendChild(copyBtn);
+        tdAcciones.appendChild(deleteBtn);
+    
+        tr.appendChild(tdPlataforma);
+        tr.appendChild(tdContrasena);
+        tr.appendChild(tdAcciones);
+    
+        listaContraseñas.appendChild(tr);
     }
+    
+    
 
-    function copiarContraseña(Contraseña) {
-        navigator.clipboard.writeText(Contraseña)
+    function copiarContraseña(contrasena) {
+        navigator.clipboard.writeText(contrasena)
             .then(() => mostrarMensaje("Contraseña copiada al portapapeles.", "exito"))
             .catch(() => mostrarMensaje("Error al copiar la contraseña.", "error"));
     }

@@ -4,31 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de Contraseñas</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <main class="contenedor">
+        <h1>Generador de Contraseñas</h1>
 
-    <h1>Generador de Contraseñas</h1>
+        <section class="formulario">
+            <label for="frase">Frase:</label>
+            <input type="text" id="frase" placeholder="Escribe una frase...">
 
-    <label for="frase">Frase base:</label>
-    <input type="text" id="frase">
+            <label for="plataforma">Plataforma:</label>
+            <select id="plataforma">
+                <option value="GitHub">GitHub</option>
+                <option value="Facebook">Facebook</option>
+                <option value="Twitter">Twitter</option>
+            </select>
 
-    <label for="plataforma">Selecciona la plataforma:</label>
-    <select id="plataforma">
-        <option value="GitHub">GitHub</option>
-        <option value="Facebook">Facebook</option>
-        <option value="Twitter">Twitter</option>
-        <option value="Otra">Otra</option>
-    </select>
+            <button id="generarBtn">Generar Contraseña</button>
+        </section>
 
-    <button id="generarBtn">Generar Contraseña</button>
+        <p id="mensajeError" class="mensaje error"></p>
+        <p id="mensajeExito" class="mensaje exito"></p>
 
-    <p id="mensajeError" style="display:none; color: red;"></p>
-    <p id="mensajeExito" style="display:none; color: green;"></p>
+        <section class="tabla-contraseñas">
+            <h2>Contraseñas guardadas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Plataforma</th>
+                        <th>Contraseña</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="listaContraseñas"></tbody>
+            </table>
+        </section>
+    </main>
 
-    <h2>Contraseñas Generadas:</h2>
-    <ul id="listaContraseñas"></ul>
+<script src="script.js"></script>
 
-    <script src="script.js"></script>
+</body>
+
+    
 
 </body>
 </html>
